@@ -23,7 +23,7 @@ public class CheckContentStickersTest {
     @Test
     public void checkContentStickersTest() {
         driver.get("http://localhost/litecart/");
-        List<WebElement> productsList = driver.findElements(By.xpath("//*[@class='product column shadow hover-light']"));
+        List<WebElement> productsList = driver.findElements(By.className("image-wrapper"));
 
         for (WebElement product : productsList) {
             List<WebElement> stickersList = product.findElements(By.className("sticker"));
