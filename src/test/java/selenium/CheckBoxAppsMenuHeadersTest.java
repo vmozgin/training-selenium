@@ -23,28 +23,41 @@ public class CheckBoxAppsMenuHeadersTest {
 
     @Test
     public void checkBoxAppsMenuHeadersTest() {
-        login();
+        doLogin();
 
-        List<WebElement> elementList = driver.findElements(By.xpath("//*[@id='box-apps-menu']/li"));
+        List<WebElement> leftBoxParentGroupsList = getLeftBoxParentGroups();
+        for (int i = 0; i < leftBoxParentGroupsList.size(); i++) {
+            leftBoxParentGroupsList = getLeftBoxParentGroups();
+            leftBoxParentGroupsList.get(i).click();
+            leftBoxParentGroupsList = getLeftBoxParentGroups();
+            assertHeaderIsPresent();
 
-        for (int i = 0; i < elementList.size(); i++) {
-            elementList = driver.findElements(By.xpath("//*[@id='box-apps-menu']/li"));
-            elementList.get(i).click();
-            Assert.assertTrue(isElementPresent(driver, By.tagName("h1")));
+            List<WebElement> leftBoxChildGroupsList = getLeftBoxChildGroups();
+            for (int j = 0; j < leftBoxChildGroupsList.size(); j++) {
+                leftBoxChildGroupsList.get(j).click();
+                leftBoxChildGroupsList = getLeftBoxChildGroups();
+                assertHeaderIsPresent();
+            }
         }
     }
 
-    @AfterClass
-    public void stop() {
-        driver.quit();
-        driver = null;
-    }
-
-    private void login() {
+    private void doLogin() {
         driver.get("http://localhost/litecart/admin/");
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
+    }
+
+    private List<WebElement> getLeftBoxParentGroups() {
+        return driver.findElements(By.id("app-"));
+    }
+
+    private List<WebElement> getLeftBoxChildGroups() {
+        return driver.findElements(By.xpath("//*[starts-with(@id,'doc')]"));
+    }
+
+    private void assertHeaderIsPresent() {
+        Assert.assertTrue(isElementPresent(driver, By.tagName("h1")));
     }
 
     private boolean isElementPresent(WebDriver driver, By locator) {
@@ -54,5 +67,11 @@ public class CheckBoxAppsMenuHeadersTest {
         } catch (NoSuchElementException ex) {
             return false;
         }
+    }
+
+    @AfterClass
+    public void stop() {
+        driver.quit();
+        driver = null;
     }
 }
