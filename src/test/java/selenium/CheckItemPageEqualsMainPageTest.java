@@ -1,7 +1,6 @@
 package selenium;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -88,14 +87,14 @@ public class CheckItemPageEqualsMainPageTest {
     @Test
     public void campaignPriceIsMoreThenRegular() {
         WebElement yellowDuckMainPage = openMainPageAndGetYellowDuck();
-        WebElement mainPageRegularPrice = yellowDuckMainPage.findElement(By.className("regular-price"));
-        WebElement mainPageCampaignPrice = yellowDuckMainPage.findElement(By.className("campaign-price"));
+        String mainPageRegularPrice = yellowDuckMainPage.findElement(By.className("regular-price")).getCssValue("font-size");
+        String mainPageCampaignPrice = yellowDuckMainPage.findElement(By.className("campaign-price")).getCssValue("font-size");
 
         assertCampaignPriceIsMoreThenRegular(mainPageCampaignPrice, mainPageRegularPrice);
 
         openYellowDuckItemPage();
-        WebElement itemPageRegularPrice = driver.findElement(By.className("regular-price"));
-        WebElement itemPageCampaignPrice = driver.findElement(By.className("campaign-price"));
+        String itemPageRegularPrice = driver.findElement(By.className("regular-price")).getCssValue("font-size");
+        String itemPageCampaignPrice = driver.findElement(By.className("campaign-price")).getCssValue("font-size");
 
         assertCampaignPriceIsMoreThenRegular(itemPageCampaignPrice, itemPageRegularPrice);
     }
@@ -127,11 +126,11 @@ public class CheckItemPageEqualsMainPageTest {
         Assert.assertEquals(colors.getBlue(), 0);
     }
 
-    private void assertCampaignPriceIsMoreThenRegular(WebElement campaignPrice, WebElement regularPrice) {
-        Dimension campaignPriceSize = campaignPrice.getSize();
-        Dimension regularPriceSize = regularPrice.getSize();
-        Assert.assertTrue((campaignPriceSize.getHeight() * campaignPriceSize.getWidth())
-                > (regularPriceSize.getWidth() * regularPriceSize.getHeight()));
+    private void assertCampaignPriceIsMoreThenRegular(String campaignPrice, String regularPrice) {
+        double campaignPriceValue = Double.parseDouble(campaignPrice.substring(0, campaignPrice.length() - 2));
+        double regularPriceValue = Double.parseDouble(regularPrice.substring(0, regularPrice.length() - 2));
+
+        Assert.assertTrue(campaignPriceValue > regularPriceValue);
     }
 
     @AfterClass
