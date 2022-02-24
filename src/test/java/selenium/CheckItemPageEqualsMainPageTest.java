@@ -138,7 +138,4 @@ public class CheckItemPageEqualsMainPageTest {
         driver.quit();
         driver = null;
     }
-
-
-
 }
