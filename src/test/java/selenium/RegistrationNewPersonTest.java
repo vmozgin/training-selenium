@@ -1,8 +1,10 @@
 package selenium;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -19,7 +21,7 @@ public class RegistrationNewPersonTest {
 
     @BeforeClass
     public void start() {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         wait = new WebDriverWait(driver, 10);
     }
 
@@ -33,18 +35,21 @@ public class RegistrationNewPersonTest {
         driver.findElement(By.xpath("//input[@name='address1']")).sendKeys("Кремль");
         driver.findElement(By.xpath("//input[@name='postcode']")).sendKeys("12345");
         driver.findElement(By.xpath("//input[@name='city']")).sendKeys("Москва");
-        driver.findElement(By.xpath("//select[@name='country_code']/option[@value='US']")).click();
+        driver.findElement(By.className("select2-selection__arrow")).click();
+        WebElement us = driver.findElement(By.xpath("//span[@class='select2-results']//li[text()='United States']"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", us);
+        driver.findElement(By.xpath("//span[@class='select2-results']//li[text()='United States']")).click();
         wait.until(presenceOfElementLocated(By.xpath("//select[@name='zone_code']/option[@value='GU']"))).click();
         driver.findElement(By.xpath("//input[@name='phone']")).sendKeys("+19851256");
         driver.findElement(By.xpath("//input[@name='email']")).sendKeys(email);
         driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
         driver.findElement(By.xpath("//input[@name='confirmed_password']")).sendKeys(password);
         driver.findElement(By.xpath("//button[@name='create_account']")).click();
-        driver.findElement(By.xpath("//div[@id='box-account']//li[4]//a")).click();
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(email);
+        wait.until(presenceOfElementLocated(By.xpath("//div[@id='box-account']//li[4]//a"))).click();
+        wait.until(presenceOfElementLocated(By.xpath("//input[@name='email']"))).sendKeys(email);
         driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
         driver.findElement(By.xpath("//button[@name='login']")).click();
-        driver.findElement(By.xpath("//div[@id='box-account']//li[4]//a")).click();
+        wait.until(presenceOfElementLocated(By.xpath("//div[@id='box-account']//li[4]//a"))).click();
     }
 
     private String generateRandomEmail() {
