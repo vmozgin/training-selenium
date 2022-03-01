@@ -26,14 +26,13 @@ public class BasketTest {
     @Test
     public void basketTest() {
         driver.get("http://localhost/litecart/en/");
-        addCartProduct();
-        waitQuantityEquals("1");
-        driver.findElement(By.className("general-0")).click();
-        addCartProduct();
-        waitQuantityEquals("2");
-        driver.findElement(By.className("general-0")).click();
-        addCartProduct();
-        waitQuantityEquals("3");
+
+        for (int i = 0; i <= 3; i++) {
+            addCartProduct();
+            waitQuantityEquals(String.valueOf(i));
+            driver.findElement(By.className("general-0")).click();
+        }
+
         driver.findElement(By.xpath("//div[@id='cart']/a[3]")).click();
 
         while (isElementPresent(By.name("remove_cart_item"))) {
