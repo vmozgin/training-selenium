@@ -17,17 +17,20 @@ public class CartPage extends Page{
         return isElementPresent(By.name("remove_cart_item"));
     }
 
-    public List<WebElement> dataTableCorners() {
-        return driver.findElements(By.xpath("//table[@class='dataTable rounded-corners']//tr"));
+    public List<WebElement> dataTableRows() {
+        return driver.findElements(dataTableRowsLocator());
     }
 
     public WebElement removeItemButton() {
         return driver.findElement(By.name("remove_cart_item"));
     }
 
-    public CartPage waitDataTableCornersUpdate() {
-        List<WebElement> list = dataTableCorners();
-        wait.until(ExpectedConditions.stalenessOf(list.get(0)));
+    public CartPage waitDataTableRowsUpdate(List<WebElement> rows) {
+        wait.until(ExpectedConditions.numberOfElementsToBe(dataTableRowsLocator(), rows.size() -1));
         return this;
+    }
+
+    private By dataTableRowsLocator() {
+        return By.xpath("//table[@class='dataTable rounded-corners']//td[contains(text(),'Duck')]");
     }
 }

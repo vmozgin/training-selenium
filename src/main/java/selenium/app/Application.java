@@ -1,10 +1,13 @@
 package selenium.app;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import selenium.pages.CartPage;
 import selenium.pages.MainPage;
 import selenium.pages.ProductPage;
+
+import java.util.List;
 
 public class Application {
 
@@ -15,7 +18,7 @@ public class Application {
     private final CartPage cartPage;
 
     public Application() {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         mainPage = new MainPage(driver);
         productPage = new ProductPage(driver);
         cartPage = new CartPage(driver);
@@ -39,8 +42,9 @@ public class Application {
         mainPage.open();
         mainPage.cartButton().click();
         while (cartPage.removeCartItemIsPresent()) {
+            List<WebElement> tableRows = cartPage.dataTableRows();
             cartPage.removeItemButton().click();
-            cartPage.waitDataTableCornersUpdate();
+            cartPage.waitDataTableRowsUpdate(tableRows);
         }
     }
 
