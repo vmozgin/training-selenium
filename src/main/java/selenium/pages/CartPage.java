@@ -26,7 +26,7 @@ public class CartPage extends Page{
     }
 
     public CartPage waitDataTableRowsUpdate(List<WebElement> rows) {
-        wait.until(ExpectedConditions.numberOfElementsToBe(dataTableRowsLocator(), rows.size() -1));
+        wait.until(ExpectedConditions.stalenessOf(rows.get(0)));
         return this;
     }
 
